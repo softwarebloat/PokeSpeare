@@ -34,7 +34,7 @@ jobs:
           poetry install
       - name: lint with flake8
         run: |
-          poetry run flake8 src tests --
+          poetry run flake8 src tests
 
   tests:
     runs-on: ubuntu-latest
