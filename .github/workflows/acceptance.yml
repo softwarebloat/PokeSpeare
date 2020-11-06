@@ -1,18 +1,21 @@
-# This is a basic workflow to help you get started with Actions
 name: acceptance
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
+# Controls when the action will run.
 on: [push, pull_request]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  lint:
-    # The type of runner that the job will run on
+  check-commit-message:
+    name: Check Commit Message
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Check Commit Type
+        uses: gsactions/commit-message-checker@v1
+        with:
+          pattern: '^(feat|fix|change|remove|chore|docs|refactor|test)\:\s.+\s\(\#\d+\)$'
+          error: 'Wrong commit message. please fix it.'
+  lint:
+    runs-on: ubuntu-latest
     steps:
       - name: Check out source repository
         uses: actions/checkout@v2
@@ -32,6 +35,25 @@ jobs:
       - name: lint with flake8
         run: |
           poetry run flake8 src tests --
+
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source repository
+        uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8.3
+      - name: install poetry
+        run: |
+          curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
+          sudo ln -s $HOME/.poetry/bin/poetry /usr/bin/poetry
+          poetry --version
+          poetry config virtualenvs.create false
+      - name: Install dependencies
+        run: |
+          poetry install
       - name: run test with pytest
         run: |
           poetry run pytest tests --cov-report term-missing --cov=src
