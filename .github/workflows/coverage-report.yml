@@ -1,0 +1,43 @@
+name: coverage badge
+
+on: push
+#    branches:
+#      -master
+
+jobs:
+  generate-file:
+    name: Generate coverage badge file
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source repository
+        uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8.3
+      - name: install poetry
+        run: |
+          curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
+          sudo ln -s $HOME/.poetry/bin/poetry /usr/bin/poetry
+          poetry --version
+          poetry config virtualenvs.create false
+      - name: Install dependencies
+        run: |
+          poetry install
+      - name: Generate Coverage File
+        run: |
+          make coverage-report
+
+  upload-file:
+    name: Push file to gist
+    runs-on: ubuntu-latest
+    needs: generate-file
+    steps:
+      - uses: actions/checkout@v2
+      - name: Deploy
+        uses: exuanbo/actions-deploy-gist@v1.0.3
+        with:
+          token: ${{ secrets.GIST }}
+          gist_id: 9a9176694f03bd01fc2fe65c82c5b246
+          gist_file_name: pokeapi-coverage.json
+          file_path: .cov-report.json
