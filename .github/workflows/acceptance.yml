@@ -36,7 +36,7 @@ jobs:
         run: |
           poetry run flake8 src tests
 
-  tests:
+  unit-tests:
     runs-on: ubuntu-latest
     steps:
       - name: Check out source repository
@@ -54,6 +54,6 @@ jobs:
       - name: Install dependencies
         run: |
           poetry install
-      - name: run test with pytest
+      - name: run tests with pytest
         run: |
-          poetry run pytest tests --cov-report term-missing --cov=src
+          poetry run pytest tests --cov-report term-missing --cov=src -m "not integration"

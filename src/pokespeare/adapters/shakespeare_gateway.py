@@ -16,10 +16,11 @@ class AsyncShakespeareGateway(ShakespeareGateway):
                 )
             result.raise_for_status()
         except httpx.HTTPError as err:
-            logging.error(
-                'http error while retrieving Shakespeare translation',
-                {'error': str(err)}
-            )
+            logging.error('http error while retrieving Shakespeare translation')
+            if err.response and err.response.status_code == 429:
+                logging.error('Too Many Requests for Shakespeare translation service')
+                raise ShakespeareGatewayError.ShakespeareGatewayTooManyRequests(str(err))
+
             raise ShakespeareGatewayError.ShakespeareGatewayBaseError(str(err))
 
         return result
