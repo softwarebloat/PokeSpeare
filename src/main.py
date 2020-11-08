@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from routers import shakespearean_pokemon
+from pokespeare.routers import shakespearean_pokemon
 
 app = FastAPI()
 
