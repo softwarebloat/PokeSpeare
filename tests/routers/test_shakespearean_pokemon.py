@@ -21,3 +21,10 @@ def test_shakesperean_pokemon_endpoint_raise_exception_if_called_more_than_five_
 
     response = client.get("/pokemon/charizard")
     assert response.status_code == 429
+
+
+@pytest.mark.integration
+def test_shakesperean_pokemon_endpoint_pokemon_not_found():
+    response = client.get("/pokemon/goku")
+
+    assert response.status_code == 404

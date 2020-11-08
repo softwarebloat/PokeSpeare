@@ -1,8 +1,10 @@
 from fastapi import APIRouter, Path, HTTPException
+
+
 from pokespeare.adapters.pokeapi_gateway import AsyncPokeapiGateway
 from pokespeare.adapters.shakespeare_gateway import AsyncShakespeareGateway
+from pokespeare.entities.pokeapi_gateway import PokeapiGatewayError
 from pokespeare.entities.shakespeare_gateway import ShakespeareGatewayError
-
 from pokespeare.use_cases import translate_pokemon_description
 from pokespeare.use_cases.translate_pokemon_description import TranslatePokemonResponse
 
@@ -26,5 +28,7 @@ async def shakespearean_pokemon(
             'shakespearegatewaty': AsyncShakespeareGateway().get_shakespeare_translation,
             'pokemon_name': pokemon_name,
         })
+    except PokeapiGatewayError.PokeapiGatewayNotFoundError:
+        raise HTTPException(status_code=404, detail="The pokemon does not exists. Please try again with a correct one.")  # noqa: E501
     except ShakespeareGatewayError.ShakespeareGatewayTooManyRequests as err:
         raise HTTPException(status_code=429, detail=str(err))
