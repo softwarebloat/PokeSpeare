@@ -16,6 +16,9 @@ class ShakespeareGatewayError:
     class ShakespeareGatewayResponseValidationError(ShakespeareGatewayBaseError):
         pass
 
+    class ShakespeareGatewayTooManyRequests(ShakespeareGatewayBaseError):
+        pass
+
 
 class ShakespeareGateway(BaseModel, abc.ABC):
 

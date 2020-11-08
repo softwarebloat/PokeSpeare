@@ -18,9 +18,9 @@ class AsyncPokeapiGateway(PokeapiGateway):
                 result = await client.get(f"{self.BASE_URL}/pokemon-species/{pokemon_name}/")
             result.raise_for_status()
         except httpx.HTTPError as err:
-            logging.error('http error while retrieving pokemon species', {'error': str(err)})
+            logging.error('http error while retrieving pokemon species')
             if err.response and err.response.status_code == 404:
-                logging.error('pokemon does not exists!', {'error': str(err)})
+                logging.error('pokemon does not exists!')
                 raise PokeapiGatewayError.PokeapiGatewayNotFoundError(str(err))
             else:
                 raise PokeapiGatewayError.PokeapiGatewayBaseError(str(err))
@@ -32,5 +32,5 @@ class AsyncPokeapiGateway(PokeapiGateway):
         try:
             return PokemonSpeciesResponse(**dict(res.json()))
         except pydantic.ValidationError as err:
-            logging.error('Pokemon species response not valid', {'error': str(err)})
+            logging.error('Pokemon species response not valid')
             raise PokeapiGatewayError.PokeapiGatewayResponseNotValid(str(err))

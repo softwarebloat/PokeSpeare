@@ -4,3 +4,6 @@ skip_empty = true
 exclude_lines =
     # Don't complain if tests don't hit defensive assertion code:
     raise NotImplementedError
+omit =
+    # omit the main.py file from the coverage report
+    src/main.py

@@ -60,6 +60,15 @@ class TestGetShakespeareTranslation:
         with pytest.raises(ShakespeareGatewayError.ShakespeareGatewayResponseValidationError):
             await gateway.get_shakespeare_translation(TEXT_TO_TRANSLATE)
 
+    async def test_get_shakespeare_translation_raise_error_on_too_many_requests(
+        self,
+        mock_get_shakespeare_translation,
+        gateway,
+    ):
+        mock_get_shakespeare_translation(status=429)
+        with pytest.raises(ShakespeareGatewayError.ShakespeareGatewayTooManyRequests):
+            await gateway.get_shakespeare_translation(TEXT_TO_TRANSLATE)
+
     async def test_return_translated_text_on_success(
         self,
         mock_get_shakespeare_translation,
