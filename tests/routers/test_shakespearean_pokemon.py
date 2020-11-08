@@ -2,7 +2,6 @@ import pytest
 from fastapi.testclient import TestClient
 
 from main import app
-from pokespeare.use_cases.translate_pokemon_description import TranslatePokemonResponse
 
 client = TestClient(app)
 
@@ -11,7 +10,6 @@ client = TestClient(app)
 def test_shakesperean_pokemon_endpoint_success():
     response = client.get("/pokemon/charizard")
     assert response.status_code == 200
-    assert isinstance(response.content(), TranslatePokemonResponse)
 
 
 @pytest.mark.integration
