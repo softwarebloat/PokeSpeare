@@ -13,20 +13,24 @@ So the project use the free plan that is limited to **60 API calls** a day with 
 #### 💬 Description
 I organized the project task with GitHub issues. You can check the project board [here](https://github.com/softwarebloat/PokeSpeare/projects/1)  
 A CI is set up with [GitHub actions](https://github.com/softwarebloat/PokeSpeare/actions?query=workflow%3Aacceptance) that checks for:
-- commit message pattern
-- linting
-- tests
+- Commit message pattern
+- Linting
+- Tests
 
 > NOTE: The CI runs only unit-tests because of the limitation of the free plan of the shakespeare translator service
 
 
-### 🚀 Docker 
+### 🚀 Deploy (CD)
+The PokeSpeare API is deployed to Heroku with a CD GitHub action for every push on **master**.  
+The API is reachable at `https://pokespeare-api.herokuapp.com` and [HERE](https://pokespeare-api.herokuapp.com/docs) you can access the swagger 
+
+### 📦 Docker 
 You can run the application in a docker container  
 
 ##### Requirements
 - [install docker](https://docs.docker.com/get-docker/)
 
-To **build** the app, you can run the following command:  
+To **build** the app, you can run the following command from the root of the project:  
 `make docker-build`
 
 After you built it, you can run it:  
@@ -44,8 +48,7 @@ The following **GET** endpoint is exposed: `/pokemon/<pokemon-name>`
 
 
 ### 🔨 Development
-You can also run locally the app, tests, linter, etc...  
-This facilitate the local development process
+You can also run the app, tests, linter, etc... without docker to facilitate local development
 
 ##### Requirements
 - [poetry](https://python-poetry.org/) python dependency manager
@@ -57,3 +60,11 @@ List of possible commands:
 - `make unit-tests:` to run all the unit tests of the project with coverage report
 - `make tests` to run all the tests (integration included)
 - `make dev` to run the application locally with auto reload reachable at `localhost:8080` or `localhost:8080/docs` for the swagger
+
+
+### ✏️ Contributing
+We use [conventional commits](https://www.conventionalcommits.org/en/v1.0.0-beta.2/) with the issue id at the end of the commit message within brackets  
+example:  
+`feat: my new amazing feature (#87)`  
+
+> NOTE: a commit message checker step in the CI step will ensure that the commit message follows these rules

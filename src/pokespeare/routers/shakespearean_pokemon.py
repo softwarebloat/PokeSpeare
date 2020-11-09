@@ -11,7 +11,12 @@ from pokespeare.use_cases.translate_pokemon_description import TranslatePokemonR
 router = APIRouter()
 
 
-@router.get("/pokemon/{pokemon_name}", response_model=TranslatePokemonResponse)
+@router.get(
+    "/pokemon/{pokemon_name}",
+    response_model=TranslatePokemonResponse,
+    description="Retrieve the shakespearean description translation of the chosen pokemon",
+    tags=["pokemon"]
+)
 async def shakespearean_pokemon(
     pokemon_name: str = Path(..., description='The pokemon to retrieve the Shakespearean translation')  # noqa: E501
 ):
