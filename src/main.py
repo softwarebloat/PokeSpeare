@@ -13,11 +13,30 @@ app = FastAPI(
     description="REST API that given a Pokemon name return its Shakespearean description",
 )
 
-trace.set_tracer_provider(TracerProvider())
+# trace.set_tracer_provider(TracerProvider())
 
-trace.get_tracer_provider().add_span_processor(
-    BatchSpanProcessor(OTLPSpanExporter(endpoint="http://localhost:55681", insecure=True))
+resource = Resource(attributes={
+    "service.name": "pokespeare"
+})
+
+tracer = TracerProvider(resource=resource)
+
+trace.set_tracer_provider(
+    TracerProvider(resource=resource)
 )
-FastAPIInstrumentor.instrument_app(app, tracer_provider=trace)
+
+tracer.add_span_processor(
+    BatchSpanProcessor(OTLPSpanExporter(endpoint="http://tempo:55681", insecure=True))
+)
+FastAPIInstrumentor.instrument_app(app, tracer_provider=tracer)
 
 app.include_router(shakespearean_pokemon.router)
+
+@app.get("/")
+async def root():
+    tracer = trace.get_tracer(__name__)
+    with tracer.start_as_current_span("root"):
+        import logging
+        logging.warn("YOOOOOO")
+
+        return {"message": "Hello World"}
