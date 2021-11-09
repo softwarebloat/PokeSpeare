@@ -25,7 +25,6 @@ services:
       - ./tempo.yaml:/etc/tempo.yaml
     ports:
       - 8000:8000 # tempo
-      - 55681:55681 # otlp http
   pokespeare:
     build: .
     ports:
