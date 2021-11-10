@@ -26,7 +26,7 @@ trace.set_tracer_provider(
 )
 
 tracer.add_span_processor(
-    BatchSpanProcessor(OTLPSpanExporter(endpoint="http://tempo:55681", insecure=True))
+    BatchSpanProcessor(OTLPSpanExporter(endpoint="http://tempo:4317", insecure=True))
 )
 FastAPIInstrumentor.instrument_app(app, tracer_provider=tracer)
 
