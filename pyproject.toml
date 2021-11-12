@@ -7,8 +7,13 @@ authors = ["nicolino"]
 [tool.poetry.dependencies]
 python = "^3.8"
 fastapi = "^0.61.1"
-httpx = "^0.16.1"
+httpx = "^0.18.2"
 uvicorn = "^0.12.2"
+opentelemetry-api = "^1.6.2"
+opentelemetry-sdk = "^1.6.2"
+opentelemetry-instrumentation-fastapi = "^0.26b1"
+opentelemetry-exporter-otlp = "^1.6.2"
+opentelemetry-instrumentation-logging = "^0.26b1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
