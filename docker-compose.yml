@@ -2,10 +2,11 @@ version: "3.9"
 
 services:
   grafana:
-    image: grafana/grafana:8.1.2
+    image: grafana/grafana:8.2.0
     ports:
       - 5000:3000
     volumes:
+      - ./grafana.ini:/etc/grafana/grafana.ini
       - ./grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yaml
     environment:
       - GF_AUTH_ANONYMOUS_ENABLED=true
@@ -19,8 +20,8 @@ services:
       - 3100:3100
     command: -config.file=/etc/loki/local-config.yaml
   tempo:
-    image: grafana/tempo:1.1.0
-    command: [ "-config.file=/etc/tempo.yaml" ]
+    image: grafana/tempo:latest
+    command: [ "-search.enabled=true", "-config.file=/etc/tempo.yaml" ]
     volumes:
       - ./tempo.yaml:/etc/tempo.yaml
     ports:
@@ -29,6 +30,8 @@ services:
     build: .
     ports:
       - "8080:8080"
+    environment:
+      - OTEL_PYTHON_LOG_CORRELATION=true
     logging:
       driver: loki
       options:
